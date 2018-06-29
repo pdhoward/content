@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "6.2"
+cache: yarn
+script:
+  - npm run lint
+  - npm run build
+  - mkdir discovery_app
+  - cp *.svg *.png *.css dist/*.js discovery_app
+  - cp index.html discovery_app/index.html
+deploy:
+  provider: s3
+  access_key_id : $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  bucket: "discovery.contentful.com"
+  acl: public_read
+  local_dir: discovery_app
+  skip_cleanup: true
+  on:
+    branch: master
